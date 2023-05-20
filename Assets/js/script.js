@@ -53,6 +53,22 @@ Promise.all([rango1_5, rango6_11, rango12_17])
 
 /*3.- Implementar la lógica para obtener la información de los personajes de Star Wars. */
 
+rango1_5
+  .then((resultados) => {
+    // Obtener la información del primer personaje (índice 0)
+    const personaje1 = resultados[0];
+    console.log("Información del personaje 1:", personaje1);
+
+    // Obtener la información del segundo personaje (índice 1)
+    const personaje2 = resultados[1];
+    console.log("Información del personaje 2:", personaje2);
+
+    // ... y así sucesivamente
+  })
+  .catch((error) => {
+    console.log("Error al obtener la información:", error);
+  });
+
 /*4.- Generar dinámicamente los bloques de contenido que muestran el nombre, estatura y peso de los personajes. */
 
 /*5.- Organizar los bloques de contenido en secciones según los rangos de números indicados en el lado izquierdo de la vista.
