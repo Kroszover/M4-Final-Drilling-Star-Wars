@@ -5,3 +5,11 @@
     font-family: 'Poppins', sans-serif;
     background-color: wheat;
 }
+
+h1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin: 20px 0;
+}
