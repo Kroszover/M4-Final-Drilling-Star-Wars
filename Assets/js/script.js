@@ -17,6 +17,8 @@ Por ejemplo, en la sección "1 - 5", se deben generar los bloques para los perso
 /*2.- Consumir la API de Star Wars (https://swapi.dev/) utilizando el método fetch(). */
 
 import { Personaje } from "./personaje.js";
+import { Mensaje } from "./mensajes.js";
+import { crearCard } from "./cards.js";
 
 function obtenerInformacionPersonajes(rangoInicial, rangoFinal) {
   const promesas = [];
@@ -83,6 +85,34 @@ obtenerInformacionPersonajes(1, 1)
   });
 
 /*4.- Generar dinámicamente los bloques de contenido que muestran el nombre, estatura y peso de los personajes. */
+
+// Obtenemos el elemento padre donde deseas agregar las cards
+const cardContainer1 = document.getElementById("card1");
+const cardContainer2 = document.getElementById("card2");
+const cardContainer3 = document.getElementById("card3");
+
+// Añadimos la información que queremos mostrar en la card
+const cardData1 = {
+  title: Mensaje.estaSeccion,
+  description: Mensaje.findInfo + Mensaje.pjPrincipal,
+};
+const cardData2 = {
+  title: Mensaje.estaSeccion,
+  description: Mensaje.findInfo + Mensaje.pjSecundario,
+};
+const cardData3 = {
+  title: Mensaje.estaSeccion,
+  description: Mensaje.pjBlue,
+};
+
+const svgColor1 = "rgb(255, 83, 83)";
+const svgColor2 = "rgb(139, 237, 139)";
+const svgColor3 = "rgb(148, 208, 228)";
+
+// Creamos las card de la primera sección
+crearCard(cardContainer1, cardData1, svgColor1);
+crearCard(cardContainer2, cardData2, svgColor2);
+crearCard(cardContainer3, cardData3, svgColor3);
 
 /*5.- Organizar los bloques de contenido en secciones según los rangos de números indicados en el lado izquierdo de la vista.
 Por ejemplo, en la sección "1 - 5", se deben generar los bloques para los personajes del 1 al 5. */
