@@ -25,6 +25,13 @@ import {
   cardsIndiv3,
 } from "./modules/dataOfCards.js";
 
+//Uso del generador
+function* generarPersonajes(personajesData) {
+  for (const data of personajesData) {
+    yield new Personaje(data.name, data.height, data.mass);
+  }
+}
+
 function obtenerInformacionPersonajes(rangoInicial, rangoFinal) {
   const promesas = [];
 
@@ -43,9 +50,8 @@ function obtenerInformacionPersonajes(rangoInicial, rangoFinal) {
 const rango = obtenerInformacionPersonajes(1, 16);
 
 Promise.all([rango]).then((resultados) => {
-  const personajesPos = resultados[0].map((data) => {
-    return new Personaje(data.name, data.height, data.mass);
-  });
+  // Generar los personajes utilizando el generador
+  const personajesPos = [...generarPersonajes(resultados[0])];
 
   const cardContainers = {};
 
