@@ -17,9 +17,13 @@ Por ejemplo, en la sección "1 - 5", se deben generar los bloques para los perso
 /*2.- Consumir la API de Star Wars (https://swapi.dev/) utilizando el método fetch(). */
 
 import { Personaje } from "./modules/personaje.js";
-import { Mensaje } from "./modules/mensajes.js";
 import { crearCard } from "./modules/cards.js";
-import { Color } from "./modules/colores.js";
+import {
+  cardsData,
+  cardsIndiv1,
+  cardsIndiv2,
+  cardsIndiv3,
+} from "./modules/dataOfCards.js";
 
 function obtenerInformacionPersonajes(rangoInicial, rangoFinal) {
   const promesas = [];
@@ -43,113 +47,6 @@ Promise.all([rango]).then((resultados) => {
     return new Personaje(data.name, data.height, data.mass);
   });
 
-  const cardsData = [
-    // Primera sección
-    {
-      containerId: "card1",
-      title: Mensaje.estaSeccion,
-      description: Mensaje.findInfo + Mensaje.pjPrincipal,
-      svgColor: Color.Rojo,
-    },
-    {
-      containerId: "card2",
-      title: Mensaje.estaSeccion,
-      description: Mensaje.findInfo + Mensaje.pjSecundario,
-      svgColor: Color.Verde,
-    },
-    {
-      containerId: "card3",
-      title: Mensaje.estaSeccion,
-      description: Mensaje.pjBlue,
-      svgColor: Color.Azul,
-    },
-  ];
-
-  const cardsIndiv1 = [
-    // Cards individuales
-    {
-      containerId: "card1P1",
-      personajeIndex: 0,
-      svgColor: Color.Rojo,
-    },
-    {
-      containerId: "card1P2",
-      personajeIndex: 1,
-      svgColor: Color.Rojo,
-    },
-    {
-      containerId: "card1P3",
-      personajeIndex: 2,
-      svgColor: Color.Rojo,
-    },
-    {
-      containerId: "card1P4",
-      personajeIndex: 3,
-      svgColor: Color.Rojo,
-    },
-    {
-      containerId: "card1P5",
-      personajeIndex: 4,
-      svgColor: Color.Rojo,
-    },
-  ];
-
-  const cardsIndiv2 = [
-    {
-      containerId: "card2P1",
-      personajeIndex: 5,
-      svgColor: Color.Verde,
-    },
-    {
-      containerId: "card2P2",
-      personajeIndex: 6,
-      svgColor: Color.Verde,
-    },
-    {
-      containerId: "card2P3",
-      personajeIndex: 7,
-      svgColor: Color.Verde,
-    },
-    {
-      containerId: "card2P4",
-      personajeIndex: 8,
-      svgColor: Color.Verde,
-    },
-    {
-      containerId: "card2P5",
-      personajeIndex: 9,
-      svgColor: Color.Verde,
-    },
-  ];
-
-  const cardsIndiv3 = [
-    {
-      containerId: "card3P1",
-      personajeIndex: 10,
-      svgColor: Color.Azul,
-    },
-    {
-      containerId: "card3P2",
-      personajeIndex: 11,
-      svgColor: Color.Azul,
-    },
-    {
-      containerId: "card3P3",
-      personajeIndex: 12,
-      svgColor: Color.Azul,
-    },
-    {
-      containerId: "card3P4",
-      personajeIndex: 13,
-      svgColor: Color.Azul,
-    },
-    {
-      containerId: "card3P5",
-      personajeIndex: 14,
-      svgColor: Color.Azul,
-    },
-  ];
-
   const cardContainers = {};
 
   cardsData.forEach((cardData) => {
@@ -165,158 +62,69 @@ Promise.all([rango]).then((resultados) => {
     }
 
     crearCard(container, cardData, svgColor);
-  });
 
-  // Agregar evento al pasar el mouse sobre card1
-  const card1Container = document.getElementById("card1");
-  card1Container.addEventListener("mouseover", () => {
-    cardsIndiv1.forEach((cardIndivData) => {
-      const { containerId, personajeIndex, svgColor } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-
-      const personaje = personajesPos[personajeIndex];
-      const description = `Estatura: ${personaje.altura} cm - Peso: ${personaje.peso} kg`;
-      cardIndivData.title = personaje.nombre;
-      cardIndivData.description = description;
-
-      crearCard(indivContainer, cardIndivData, svgColor);
+    // Agregar evento al pasar el mouse sobre la tarjeta principal
+    container.addEventListener("mouseover", () => {
+      const cardIndivArray = getCardIndivArray(containerId);
+      updateCardIndiv(personajesPos, cardIndivArray);
     });
-  });
 
-  // Agregar evento al sacar el mouse de card1
-  card1Container.addEventListener("mouseout", () => {
-    cardsIndiv1.forEach((cardIndivData) => {
-      const { containerId } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-      indivContainer.innerHTML = ""; // Limpiar el contenido del contenedor para ocultar la card individual
+    // Agregar evento al sacar el mouse de la tarjeta principal
+    container.addEventListener("mouseout", () => {
+      const cardIndivArray = getCardIndivArray(containerId);
+      clearCardIndiv(cardIndivArray);
     });
-  });
 
-  // Agregar evento al pasar el mouse sobre P1
-  const p1Container = document.getElementById("P1");
-  p1Container.addEventListener("mouseover", () => {
-    cardsIndiv1.forEach((cardIndivData) => {
-      const { containerId, personajeIndex, svgColor } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-
-      const personaje = personajesPos[personajeIndex];
-      const description = `Estatura: ${personaje.altura} cm - Peso: ${personaje.peso} kg`;
-      cardIndivData.title = personaje.nombre;
-      cardIndivData.description = description;
-
-      crearCard(indivContainer, cardIndivData, svgColor);
+    // Agregar evento al pasar el mouse sobre P1, P2 o P3
+    const pContainer = document.getElementById(
+      containerId.replace("card", "P")
+    );
+    pContainer.addEventListener("mouseover", () => {
+      const cardIndivArray = getCardIndivArray(containerId);
+      updateCardIndiv(personajesPos, cardIndivArray);
     });
-  });
 
-  // Agregar evento al sacar el mouse de P1
-  p1Container.addEventListener("mouseout", () => {
-    cardsIndiv1.forEach((cardIndivData) => {
-      const { containerId } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-      indivContainer.innerHTML = ""; // Limpiar el contenido del contenedor para ocultar la card individual
-    });
-  });
-
-  // Agregar evento al pasar el mouse sobre card2
-  const card2Container = document.getElementById("card2");
-  card2Container.addEventListener("mouseover", () => {
-    cardsIndiv2.forEach((cardIndivData) => {
-      const { containerId, personajeIndex, svgColor } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-
-      const personaje = personajesPos[personajeIndex];
-      const description = `Estatura: ${personaje.altura} cm - Peso: ${personaje.peso} kg`;
-      cardIndivData.title = personaje.nombre;
-      cardIndivData.description = description;
-
-      crearCard(indivContainer, cardIndivData, svgColor);
-    });
-  });
-
-  // Agregar evento al sacar el mouse de card2
-  card2Container.addEventListener("mouseout", () => {
-    cardsIndiv2.forEach((cardIndivData) => {
-      const { containerId } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-      indivContainer.innerHTML = ""; // Limpiar el contenido del contenedor para ocultar la card individual
-    });
-  });
-
-  // Agregar evento al pasar el mouse sobre P2
-  const p2Container = document.getElementById("P2");
-  p2Container.addEventListener("mouseover", () => {
-    cardsIndiv2.forEach((cardIndivData) => {
-      const { containerId, personajeIndex, svgColor } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-
-      const personaje = personajesPos[personajeIndex];
-      const description = `Estatura: ${personaje.altura} cm - Peso: ${personaje.peso} kg`;
-      cardIndivData.title = personaje.nombre;
-      cardIndivData.description = description;
-
-      crearCard(indivContainer, cardIndivData, svgColor);
-    });
-  });
-
-  // Agregar evento al sacar el mouse de P2
-  p2Container.addEventListener("mouseout", () => {
-    cardsIndiv2.forEach((cardIndivData) => {
-      const { containerId } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-      indivContainer.innerHTML = ""; // Limpiar el contenido del contenedor para ocultar la card individual
-    });
-  });
-
-  // Agregar evento al pasar el mouse sobre card3
-  const card3Container = document.getElementById("card3");
-  card3Container.addEventListener("mouseover", () => {
-    cardsIndiv3.forEach((cardIndivData) => {
-      const { containerId, personajeIndex, svgColor } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-
-      const personaje = personajesPos[personajeIndex];
-      const description = `Estatura: ${personaje.altura} cm - Peso: ${personaje.peso} kg`;
-      cardIndivData.title = personaje.nombre;
-      cardIndivData.description = description;
-
-      crearCard(indivContainer, cardIndivData, svgColor);
-    });
-  });
-
-  // Agregar evento al sacar el mouse de card3
-  card3Container.addEventListener("mouseout", () => {
-    cardsIndiv3.forEach((cardIndivData) => {
-      const { containerId } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-      indivContainer.innerHTML = ""; // Limpiar el contenido del contenedor para ocultar la card individual
-    });
-  });
-
-  // Agregar evento al pasar el mouse sobre P3
-  const p3Container = document.getElementById("P3");
-  p3Container.addEventListener("mouseover", () => {
-    cardsIndiv3.forEach((cardIndivData) => {
-      const { containerId, personajeIndex, svgColor } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-
-      const personaje = personajesPos[personajeIndex];
-      const description = `Estatura: ${personaje.altura} cm - Peso: ${personaje.peso} kg`;
-      cardIndivData.title = personaje.nombre;
-      cardIndivData.description = description;
-
-      crearCard(indivContainer, cardIndivData, svgColor);
-    });
-  });
-
-  // Agregar evento al sacar el mouse de P3
-  p3Container.addEventListener("mouseout", () => {
-    cardsIndiv3.forEach((cardIndivData) => {
-      const { containerId } = cardIndivData;
-      const indivContainer = document.getElementById(containerId);
-      indivContainer.innerHTML = ""; // Limpiar el contenido del contenedor para ocultar la card individual
+    // Agregar evento al sacar el mouse de P1, P2 o P3
+    pContainer.addEventListener("mouseout", () => {
+      const cardIndivArray = getCardIndivArray(containerId);
+      clearCardIndiv(cardIndivArray);
     });
   });
 });
+
+function getCardIndivArray(containerId) {
+  if (containerId === "card1" || containerId === "P1") {
+    return cardsIndiv1;
+  } else if (containerId === "card2" || containerId === "P2") {
+    return cardsIndiv2;
+  } else if (containerId === "card3" || containerId === "P3") {
+    return cardsIndiv3;
+  }
+
+  return [];
+}
+
+function updateCardIndiv(personajesPos, cardIndivArray) {
+  cardIndivArray.forEach((cardIndivData) => {
+    const { containerId, personajeIndex, svgColor } = cardIndivData;
+    const indivContainer = document.getElementById(containerId);
+
+    const personaje = personajesPos[personajeIndex];
+    const description = `Estatura: ${personaje.altura} cm - Peso: ${personaje.peso} kg`;
+    cardIndivData.title = personaje.nombre;
+    cardIndivData.description = description;
+
+    crearCard(indivContainer, cardIndivData, svgColor);
+  });
+}
+
+function clearCardIndiv(cardIndivArray) {
+  cardIndivArray.forEach((cardIndivData) => {
+    const { containerId } = cardIndivData;
+    const indivContainer = document.getElementById(containerId);
+    indivContainer.innerHTML = ""; // Limpiar el contenido del contenedor para ocultar la tarjeta individual
+  });
+}
 
 /*5.- Organizar los bloques de contenido en secciones según los rangos de números indicados en el lado izquierdo de la vista.
 Por ejemplo, en la sección "1 - 5", se deben generar los bloques para los personajes del 1 al 5. */
