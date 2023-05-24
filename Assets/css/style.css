@@ -142,3 +142,28 @@ h1 {
 .single-timeline-area .single-timeline-content:focus .timeline-text h6 {
     color: #3f43fd;
 }
+
+.single-timeline-area {
+    position: relative;
+    z-index: 1;
+    padding-left: 180px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 500ms ease-in-out forwards;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.single-timeline-area:nth-child(even) {
+    animation-delay: 1000ms;
+}
